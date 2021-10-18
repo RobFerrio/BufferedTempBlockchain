@@ -1,10 +1,9 @@
 import datetime
 import json
 import os
-import queue
-import threading
 import time
 
+from multiprocessing import Process, Queue, Lock, Event
 from dotenv import load_dotenv
 from eth_account import Account
 from web3.auto import w3
@@ -84,8 +83,9 @@ checksum = w3.toChecksumAddress(address)
 _account_manager = AccountManager(_private_key=private_key, _address=checksum)
 contract_manager = ContractManager(_account_manager)
 hub = SensorHub()
-safe_print = threading.Lock()
-q = queue.Queue()
+safe_print = Lock()
+q = Queue()
+ended = Event()
 
 
 def producer():
@@ -100,20 +100,17 @@ def producer():
         time.sleep(1)
 
 
-def consumer():
-    while True:
+def consumer(q, e):
+    while not (q.empty() and e.is_set()):
         _temp, _time = q.get()
         hash_tx = contract_manager.store_measurement(_temp, _time)
         with safe_print:
             print("Measurement stored -> hash: ", hash_tx)
 
 
-t = threading.Thread(target=consumer())
-t.daemon = True
-t.start()
-
+p = Process(target=consumer, args = (q, ended, ))
+p.start()
 producer()
-while not q.empty():
-    time.sleep(1)
-
+ended.set()
+p.join()
 contract_manager.print_measurements()
