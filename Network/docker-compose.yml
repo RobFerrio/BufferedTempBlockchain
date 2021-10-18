@@ -1,0 +1,111 @@
+version: '3.8'
+services:
+
+  besunode0:
+    image: hyperledger/besu:21.1
+    container_name: besunode0
+    working_dir: /wrk
+    entrypoint: 
+      - /bin/sh
+      - -c
+      - |
+        besu --identity=besunode0 \
+        --data-path=data \
+        --genesis-file=./networkFiles/genesis.json \
+        --min-gas-price=0 \
+        --rpc-http-enabled \
+        --rpc-http-api=ADMIN,DEBUG,ETH,NET,WEB3,IBFT \
+        --host-allowlist="*" \
+        --rpc-http-cors-origins="all" \
+        --rpc-ws-enabled \
+        --rpc-ws-host=0.0.0.0 \
+        --rpc-ws-port=5555 \
+        --rpc-ws-api=ADMIN,DEBUG,ETH,NET,WEB3,IBFT \
+    volumes:
+      - ./networkFiles:/wrk/networkFiles
+      - ./n0/data:/wrk/data
+    network_mode: host
+
+  besunode1:
+    image: hyperledger/besu:21.1
+    container_name: besunode1
+    working_dir: /wrk
+    entrypoint: 
+      - /bin/sh
+      - -c
+      - |
+        besu --identity=besunode1 \
+        --data-path=data \
+        --genesis-file=./networkFiles/genesis.json \
+        --min-gas-price=0 \
+        --bootnodes=enode://adaf6882c7dd46cce56277860b77b776c48fb20040d27ce6bc38bea6767bbd418adae4e9e5eddcca944d610c6b46f8e2cc149a78fde0f006d071e24896d5bab5@127.0.0.1:30303 \
+        --p2p-port=30304
+        --rpc-http-enabled \
+        --rpc-http-api=ADMIN,DEBUG,ETH,NET,WEB3,IBFT \
+        --host-allowlist="*" \
+        --rpc-http-cors-origins="all" \
+        --rpc-http-port=8546 \
+        --rpc-ws-enabled \
+        --rpc-ws-host=0.0.0.0 \
+        --rpc-ws-port=5556 \
+        --rpc-ws-api=ADMIN,DEBUG,ETH,NET,WEB3,IBFT
+    volumes:
+      - ./networkFiles:/wrk/networkFiles
+      - ./n1/data:/wrk/data
+    network_mode: host
+
+  besunode2:
+    image: hyperledger/besu:21.1
+    container_name: besunode2
+    working_dir: /wrk
+    entrypoint: 
+      - /bin/sh
+      - -c
+      - |
+        besu --identity=besunode2 \
+        --data-path=data \
+        --genesis-file=./networkFiles/genesis.json \
+        --min-gas-price=0 \
+        --bootnodes=enode://adaf6882c7dd46cce56277860b77b776c48fb20040d27ce6bc38bea6767bbd418adae4e9e5eddcca944d610c6b46f8e2cc149a78fde0f006d071e24896d5bab5@127.0.0.1:30303 \
+        --p2p-port=30305
+        --rpc-http-enabled \
+        --rpc-http-api=ADMIN,DEBUG,ETH,NET,WEB3,IBFT \
+        --host-allowlist="*" \
+        --rpc-http-cors-origins="all" \
+        --rpc-http-port=8547 \
+        --rpc-ws-enabled \
+        --rpc-ws-host=0.0.0.0 \
+        --rpc-ws-port=5557 \
+        --rpc-ws-api=ADMIN,DEBUG,ETH,NET,WEB3,IBFT
+    volumes:
+      - ./networkFiles:/wrk/networkFiles
+      - ./n2/data:/wrk/data
+    network_mode: host
+
+  besunode3:
+    image: hyperledger/besu:21.1
+    container_name: besunode3
+    working_dir: /wrk
+    entrypoint: 
+      - /bin/sh
+      - -c
+      - |
+        besu --identity=besunode3 \
+        --data-path=data \
+        --genesis-file=./networkFiles/genesis.json \
+        --min-gas-price=0 \
+        --bootnodes=enode://adaf6882c7dd46cce56277860b77b776c48fb20040d27ce6bc38bea6767bbd418adae4e9e5eddcca944d610c6b46f8e2cc149a78fde0f006d071e24896d5bab5@127.0.0.1:30303 \
+        --p2p-port=30306
+        --rpc-http-enabled \
+        --rpc-http-api=ADMIN,DEBUG,ETH,NET,WEB3,IBFT \
+        --host-allowlist="*" \
+        --rpc-http-cors-origins="all" \
+        --rpc-http-port=8548 \
+        --rpc-ws-enabled \
+        --rpc-ws-host=0.0.0.0 \
+        --rpc-ws-port=5558 \
+        --rpc-ws-api=ADMIN,DEBUG,ETH,NET,WEB3,IBFT
+    volumes:
+      - ./networkFiles:/wrk/networkFiles
+      - ./n3/data:/wrk/data
+    network_mode: host
