@@ -60,7 +60,7 @@ class ContractManager:
         return self.contract.get_function_by_name('storeMeasurement')
 
     def print_measurements(self):
-        x = self.contract.caller.getMeasurements()
+        x = self.contract.caller({'from': self.account_manager.address}).getMeasurements()
         i = 0
         for m in x:
             i += 1
@@ -90,7 +90,7 @@ ended = Event()
 
 def producer():
     n = 0
-    while n < 100:
+    while n < 10:
         n += 1
         temp = hub.get_off_board_temperature()
         now = int(time.time())
