@@ -7,7 +7,7 @@
     Basta lanciare docker-compose up dalla cartella Network
 
 3 - Deploy del contratto
-    Usare lo script di deploy con node deploy.js (è necessario installare i node_modules prima => npm install)
+    Usare lo script di deploy con node deploy.js (è necessario installare i node_modules prima => npm install web3 e fs-extra)
 
 4 - Lanciare startMeasurements
     Bisogna installare i moduli in requirements.txt:
